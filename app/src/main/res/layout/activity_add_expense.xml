@@ -117,6 +117,15 @@
             android:textColorHint="#CCCCCC"
             android:textSize="48sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/gray_medium"
+            android:textSize="16sp"
+            android:text="Today" />
         <EditText
             android:id="@+id/commentEditText"
             android:layout_width="match_parent"
@@ -224,16 +233,16 @@
                 android:text="9"
                 android:textColor="#000000"
                 android:textSize="24sp" />
-            <TextView
+            <ImageButton
+                android:id="@+id/datePickerButton"
                 android:layout_width="0dp"
                 android:layout_height="64dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="4dp"
                 android:background="@drawable/number_button_background"
-                android:gravity="center"
-                android:text="$"
-                android:textColor="#000000"
-                android:textSize="24sp" />
+                android:src="@drawable/ic_calendar"
+                android:contentDescription="Select Date"
+                app:tint="@color/black" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="64dp"

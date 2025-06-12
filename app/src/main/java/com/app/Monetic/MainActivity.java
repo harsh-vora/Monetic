@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import com.google.android.material.button.MaterialButton;
 public class MainActivity extends AppCompatActivity {
     private TextView totalBalanceText;
     private TextView dailyExpenseText;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView monthlyExpenseText;
     private RecyclerView categoryRecyclerView;
     private ExpenseBarChart expenseBarChart;
-    private FloatingActionButton fabAddExpense;
+    private MaterialButton fabAddExpense;
     private ExpenseDatabase database;
     private CategoryAdapter categoryAdapter;
     @Override

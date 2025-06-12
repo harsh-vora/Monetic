@@ -11,6 +11,12 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 public class AddExpenseActivity extends AppCompatActivity {
     private EditText amountEditText;
     private EditText commentEditText;
@@ -18,13 +24,19 @@ public class AddExpenseActivity extends AppCompatActivity {
     private Spinner categorySpinner;
     private MaterialButton saveButton;
     private ExpenseDatabase database;
+    private TextView dateTextView;
+    private Calendar selectedDate;
     private List<String> paymentMethods = new ArrayList<>(Arrays.asList("Cash", "Card", "Digital Wallet"));
     private List<String> categories = new ArrayList<>(Arrays.asList("Shopping", "Food", "Gifts", "Transport", "Entertainment", "Bills", "Other"));
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_expense);
+
+        selectedDate = Calendar.getInstance();
+
         initViews();
+        updateDateLabel();
         setupSpinners();
         setupClickListeners();
 
@@ -36,6 +48,7 @@ public class AddExpenseActivity extends AppCompatActivity {
         paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         categorySpinner = findViewById(R.id.categorySpinner);
         saveButton = findViewById(R.id.saveButton);
+        dateTextView = findViewById(R.id.dateTextView);
     }
     private void setupSpinners() {
         ArrayAdapter<String> paymentAdapter = new ArrayAdapter<>(this,
@@ -47,10 +60,29 @@ public class AddExpenseActivity extends AppCompatActivity {
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(categoryAdapter);
     }
+    private void updateDateLabel() {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault());
+        dateTextView.setText(sdf.format(selectedDate.getTime()));
+    }
     private void setupClickListeners() {
         saveButton.setOnClickListener(v -> saveExpense());
 
         findViewById(R.id.backButton).setOnClickListener(v -> finish());
+
+        findViewById(R.id.datePickerButton).setOnClickListener(v -> showDatePickerDialog());
+    }
+    private void showDatePickerDialog() {
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
+            selectedDate.set(Calendar.YEAR, year);
+            selectedDate.set(Calendar.MONTH, month);
+            selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateDateLabel();
+        };
+
+        new DatePickerDialog(this, dateSetListener,
+                selectedDate.get(Calendar.YEAR),
+                selectedDate.get(Calendar.MONTH),
+                selectedDate.get(Calendar.DAY_OF_MONTH)).show();
     }
     private void saveExpense() {
         String amountStr = amountEditText.getText().toString().trim();
@@ -72,7 +104,7 @@ public class AddExpenseActivity extends AppCompatActivity {
             expense.setCategory(category);
             expense.setPaymentMethod(paymentMethod);
             expense.setComment(comment);
-            expense.setDate(System.currentTimeMillis());
+            expense.setDate(selectedDate.getTimeInMillis());
             new Thread(() -> {
                 database.expenseDao().insert(expense);
                 runOnUiThread(() -> {
