@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Monetic</string>
+
+    <string name="add_expense_fab_description">Add new expense</string>
+</resources>
